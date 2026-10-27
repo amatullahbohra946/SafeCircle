@@ -1,0 +1,285 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeCircle | My Journal</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: 'Segoe UI', sans-serif;
+            color: #f4f0ff;
+            background:
+                radial-gradient(circle at 15% 15%, #26365c 0, transparent 35%),
+                radial-gradient(circle at 85% 80%, #30234e 0, transparent 35%),
+                #0b1020;
+            padding: 30px 16px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 780px;
+            margin: auto;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 35px;
+        }
+
+        .brand {
+            font-size: 23px;
+            font-weight: 700;
+            color: #d8ceff;
+        }
+
+        .back-link {
+            color: #d4c8ff;
+            text-decoration: none;
+            border: 1px solid #514875;
+            padding: 9px 14px;
+            border-radius: 10px;
+            font-size: 14px;
+        }
+
+        .back-link:hover {
+            background: #25213d;
+        }
+
+        .intro {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .moon {
+            font-size: 44px;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            font-size: clamp(27px, 5vw, 36px);
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #b8bfd6;
+            line-height: 1.7;
+        }
+
+        .journal-card {
+            background: rgba(22, 30, 55, 0.92);
+            border: 1px solid #343d60;
+            border-radius: 20px;
+            padding: 28px;
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.2);
+        }
+
+        label {
+            display: block;
+            margin: 18px 0 9px;
+            color: #e4ddff;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        input[type="text"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 13px 14px;
+            color: #f5f3ff;
+            background: #10172d;
+            border: 1px solid #414b70;
+            border-radius: 10px;
+            font: inherit;
+            outline: none;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            border-color: #aa96ff;
+            box-shadow: 0 0 0 3px rgba(170, 150, 255, 0.12);
+        }
+
+        textarea {
+            min-height: 220px;
+            resize: vertical;
+            line-height: 1.7;
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: #838eac;
+        }
+
+        select option {
+            background: #10172d;
+        }
+
+        .helper {
+            color: #9ca8c5;
+            font-size: 12px;
+            margin-top: 8px;
+            text-align: right;
+        }
+
+        .save-button {
+            width: 100%;
+            margin-top: 24px;
+            padding: 14px;
+            border: none;
+            border-radius: 11px;
+            background: linear-gradient(135deg, #a995ff, #7968d8);
+            color: #fff;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s, opacity 0.2s;
+        }
+
+        .save-button:hover {
+            transform: translateY(-2px);
+            opacity: 0.92;
+        }
+
+        .privacy-note {
+            text-align: center;
+            color: #aab3ce;
+            font-size: 13px;
+            margin-top: 22px;
+            line-height: 1.6;
+        }
+
+        .message {
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 9px;
+            background: #202c43;
+            color: #e1ddff;
+        }
+
+        @media (max-width: 500px) {
+            body {
+                padding: 20px 12px;
+            }
+
+            .journal-card {
+                padding: 19px;
+            }
+
+            .brand {
+                font-size: 19px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <header class="topbar">
+            <div class="brand">☾ SafeCircle</div>
+            <a href="{% url 'dashboard' %}" class="back-link">
+                ← Dashboard
+            </a>
+        </header>
+
+        <section class="intro">
+            <div class="moon">🌙</div>
+            <h1>My Personal Journal</h1>
+            <p class="subtitle">
+                A quiet space for your thoughts, feelings and little victories.
+                <br>
+                Take a breath. Write freely. This moment is yours.
+            </p>
+        </section>
+
+        <main class="journal-card">
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="message">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+
+            <form id="journal-form" method="POST">
+    {% csrf_token %}
+                <label for="entry-title">Entry title</label>
+                <input
+                    type="text"
+                    id="entry-title"
+                    name="title"
+                    placeholder="e.g. A little progress today"
+                    maxlength="100"
+                >
+
+                <label for="entry-mood">How are you feeling?</label>
+                <select id="entry-mood" name="mood">
+                    <option value="">Choose your feeling (optional)</option>
+                    <option value="Happy">😊 Happy</option>
+                    <option value="Calm">😌 Calm</option>
+                    <option value="Sad">😔 Sad</option>
+                    <option value="Anxious">😟 Anxious</option>
+                    <option value="Grateful">💜 Grateful</option>
+                    <option value="Confused">🌫️ Confused</option>
+                </select>
+
+                <label for="entry-content">Your thoughts</label>
+                <textarea
+                    id="entry-content"
+                    name="content"
+                    placeholder="What's on your mind today? Write without judging yourself..."
+                    required
+                ></textarea>
+
+                <p class="helper">
+                    <span id="word-count">0</span> characters
+                </p>
+
+                <button type="submit" class="save-button">
+                    Save Journal Entry ✨
+                </button>
+            </form>
+
+            <p class="privacy-note">
+                💜 Your feelings matter. Give yourself the same kindness
+                you give to others.
+            </p>
+         </main>
+
+    </div>
+
+   
+<script>
+    const journalForm = document.getElementById("journal-form");
+    const entryContent = document.getElementById("entry-content");
+    const wordCount = document.getElementById("word-count");
+
+    entryContent.addEventListener("input", function () {
+        wordCount.textContent = entryContent.value.length;
+    });
+
+    journalForm.addEventListener("submit", function (event) {
+        if (!entryContent.value.trim()) {
+            event.preventDefault();
+            alert("Please write something first.");
+        }
+    });
+</script>
+</body>
+</html>
+
+</body>
+</html>

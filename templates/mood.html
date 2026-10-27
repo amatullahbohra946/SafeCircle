@@ -1,40 +1,343 @@
+
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>SafeCircle - Mood Tracker</title>
-        <style>
-            body {
-                font-family: Arial,  sans-serif;
-                background-color: #f3f6ff;
-                text-align: center;
-                padding-top: 70px;
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeCircle - Mood Tracker</title>
 
-            }
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            color: #f5f3ff;
+            background:
+                radial-gradient(ellipse at 50% 80%,
+                    #465c91 0%, #202d55 42%,
+                    #10172f 75%, #080d1d 100%);
+        }
+
+        .sky {
+            min-height: 100vh;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 35px 18px;
+        }
+
+        .moon {
+            position: absolute;
+            top: 8%;
+            right: 12%;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: #fff3d4;
+            box-shadow: 0 0 40px #fff0c455;
+        }
+
+        .stars {
+            position: absolute;
+            top: 15%;
+            left: 10%;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: white;
+            box-shadow:
+                120px 90px #ffffff,
+                260px 20px #ffffffaa,
+                420px 130px #ffffff,
+                580px 50px #ffffffaa,
+                720px 160px #ffffff;
+        }
+
+        .mood-box {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 650px;
+            padding: 40px 30px;
+            text-align: center;
+            border: 1px solid #ffffff30;
+            border-radius: 28px;
+            background: #111a35e8;
+            box-shadow: 0 20px 70px #00000030;
+            backdrop-filter: blur(8px);
+        }
+
+        .brand {
+            color: #c7d5ff;
+            font-size: 12px;
+            letter-spacing: 4px;
+            margin-bottom: 22px;
+        }
+
+        h1 {
+            font-size: 36px;
+            margin-bottom: 15px;
+        }
+
+        h2 {
+            font-size: 21px;
+            color: #d6e0ff;
+            font-weight: normal;
+            margin-bottom: 12px;
+        }
+
+        .description {
+            color: #c6cfe7;
+            line-height: 1.7;
+            font-size: 15px;
+            margin-bottom: 28px;
+        }
+
+        .messages {
+            margin: 15px 0;
+        }
+
+        .message {
+            padding: 12px;
+            margin-bottom: 8px;
+            border: 1px solid #ffffff30;
+            border-radius: 12px;
+            background: #ffffff12;
+            color: #e6edff;
+            font-size: 14px;
+        }
+
+        .moods {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .mood-button {
+            padding: 18px 8px;
+            border: 1px solid #ffffff30;
+            border-radius: 18px;
+            color: #f5f3ff;
+            background: #ffffff0d;
+            font-size: 15px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .mood-button .emoji {
+            display: block;
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+
+        .mood-button:hover {
+            background: #ffffff18;
+            transform: translateY(-3px);
+        }
+
+        .mood-button.selected {
+            border: 2px solid #dce5ff;
+            background: #8299d55c;
+            box-shadow: 0 0 18px #a9baff30;
+        }
+
+        .selected-text {
+            min-height: 24px;
+            margin: 22px 0 15px;
+            color: #d6e0ff;
+            font-size: 14px;
+        }
+
+        .save-button {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 28px;
+            background: #f7f3e8;
+            color: #182344;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .save-button:hover {
+            background: #dce5ff;
+            transform: translateY(-2px);
+        }
+
+        .save-button:disabled {
+            opacity: 0.65;
+            cursor: wait;
+        }
+
+        .note {
+            margin-top: 18px;
+            font-size: 12px;
+            color: #b9c5e7;
+            line-height: 1.6;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 22px;
+            color: #d6e0ff;
+            font-size: 14px;
+            text-decoration: none;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 480px) {
             .mood-box {
-                background-color: #f3f6ff;
-                color: #333;
-                border: 1px solid#ddd;
-                padding: 12px 18px;
-                margin: 6px;
-                border-radius: 20px;
-                cursor: pointer;
-                font-size: 15px;
+                padding: 30px 18px;
             }
-            .mood-button:hover {
-                background-color: #e3e5ff;
-            }
-        </style>
-    </head>
-    <body>
-        <h1>SafeCircle</h1>
-        <h2>How are You Feeling today?</h2>
-        <div>
-            <button>😀 Happy</button>
-            <button>🙂 okay</button>
-            <button>😞 sad</button>
-            <button>😡 Angry</button>
-            <button>😰 Anxious</button>
-        </div>
-    </body>
 
+            h1 {
+                font-size: 29px;
+            }
+
+            .moods {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .moon {
+                width: 50px;
+                height: 50px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="sky">
+        <div class="moon"></div>
+        <div class="stars"></div>
+
+        <section class="mood-box">
+            <div class="brand">EVERYONE UNDER THE SAME SKY</div>
+
+            <h1>SafeCircle 🌙</h1>
+            <h2>How are you feeling today?</h2>
+
+            <div class="messages" aria-live="polite">
+                {% if messages %}
+                    {% for message in messages %}
+                        <p class="message">{{ message }}</p>
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+            <p class="description">
+                Take a small pause for yourself.
+                Every feeling deserves a little space.
+            </p>
+
+            <form method="POST" id="mood-form">
+                {% csrf_token %}
+
+                <div class="moods">
+                    <button type="button" class="mood-button"
+                            data-mood="Happy">
+                        <span class="emoji">😀</span>Happy
+                    </button>
+
+                    <button type="button" class="mood-button"
+                            data-mood="Okay">
+                        <span class="emoji">🙂</span>Okay
+                    </button>
+
+                    <button type="button" class="mood-button"
+                            data-mood="Sad">
+                        <span class="emoji">😞</span>Sad
+                    </button>
+
+                    <button type="button" class="mood-button"
+                            data-mood="Angry">
+                        <span class="emoji">😡</span>Angry
+                    </button>
+
+                    <button type="button" class="mood-button"
+                            data-mood="Anxious">
+                        <span class="emoji">😰</span>Anxious
+                    </button>
+                </div>
+
+                <input type="hidden" name="mood" id="mood-input">
+
+                <p class="selected-text" id="selected-text"
+                   aria-live="polite">
+                    Choose the feeling that fits you right now.
+                </p>
+
+                <button type="submit" class="save-button" id="save-button">
+                    Save Mood
+                </button>
+            </form>
+
+            <p class="note" id="note">
+                Your feelings matter. Take your time.
+            </p>
+
+            <a href="{% url 'dashboard' %}" class="back-link">
+                ← Back to Dashboard
+            </a>
+        </section>
+    </main>
+
+    <script>
+        const moodButtons = document.querySelectorAll(".mood-button");
+        const selectedText = document.getElementById("selected-text");
+        const moodInput = document.getElementById("mood-input");
+        const moodForm = document.getElementById("mood-form");
+        const saveButton = document.getElementById("save-button");
+        const note = document.getElementById("note");
+
+        let selectedMood = "";
+
+        moodButtons.forEach(function(button) {
+            button.addEventListener("click", function() {
+                selectedMood = button.dataset.mood;
+                moodInput.value = selectedMood;
+
+                moodButtons.forEach(function(item) {
+                    item.classList.remove("selected");
+                    item.setAttribute("aria-pressed", "false");
+                });
+
+                button.classList.add("selected");
+                button.setAttribute("aria-pressed", "true");
+
+                selectedText.textContent =
+                    "You're feeling " + selectedMood + ".";
+
+                note.textContent =
+                    "You've selected your mood. You can change it before saving.";
+            });
+        });
+
+        moodForm.addEventListener("submit", function(event) {
+            if (!selectedMood) {
+                event.preventDefault();
+                selectedText.textContent = "Please choose a mood first.";
+                note.textContent = "Select one feeling before saving.";
+                return;
+            }
+
+            moodInput.value = selectedMood;
+            saveButton.disabled = true;
+            saveButton.textContent = "Saving your mood...";
+            note.textContent = "Your mood is being saved.";
+        });
+    </script>
+</body>
 </html>

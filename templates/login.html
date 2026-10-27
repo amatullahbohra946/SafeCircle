@@ -1,55 +1,422 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>SafeCircle - Login</title>
-        <style>
-            body {
-                font-family: Arial,  sans-serif;
-                background-color: #f3f6ff;
-                text-align: center;
-                padding-top: 100px;
-            }
-            .login-box {
-                background-color: white;
-                width: 350px;
-                margin: auto;
-                padding: 30px; 
-                border-radius: 15px;
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeCircle - Login</title>
 
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Segoe UI", Arial, sans-serif;
+            color: #f4efe8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px 15px;
+            overflow-x: hidden;
+
+            background:
+                radial-gradient(ellipse at 50% 45%, rgba(91, 110, 160, 0.35), transparent 45%),
+                linear-gradient(
+                    180deg,
+                    #080f22 0%,
+                    #172449 45%,
+                    #142238 70%,
+                    #07101b 100%
+                );
+
+            position: relative;
+        }
+
+        /* Distant landscape */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+
+            background:
+                radial-gradient(
+                    ellipse at 50% 75%,
+                    rgba(239, 194, 130, 0.15),
+                    transparent 30%
+                ),
+                linear-gradient(
+                    180deg,
+                    transparent 50%,
+                    rgba(4, 12, 17, 0.8) 100%
+                );
+        }
+
+        /* Hills in the background */
+        .hill {
+            position: fixed;
+            bottom: 8%;
+            width: 75%;
+            height: 25%;
+            border-radius: 50% 50% 0 0;
+            z-index: -1;
+        }
+
+        .hill-left {
+            left: -20%;
+            background: linear-gradient(#263853, #101e2c);
+            transform: rotate(7deg);
+        }
+
+        .hill-right {
+            right: -20%;
+            background: linear-gradient(#1d3045, #0b1825);
+            transform: rotate(-8deg);
+        }
+
+        /* Walking path */
+        .path {
+            position: fixed;
+            bottom: -5%;
+            left: 50%;
+            width: 75%;
+            height: 55%;
+            transform: translateX(-50%);
+
+            background: linear-gradient(
+                180deg,
+                rgba(193, 166, 127, 0.08),
+                rgba(156, 129, 96, 0.25),
+                rgba(73, 69, 60, 0.55)
+            );
+
+            clip-path: polygon(
+                45% 0,
+                55% 0,
+                100% 100%,
+                0 100%
+            );
+        }
+
+        /* Grass on both sides */
+        .grass {
+            position: fixed;
+            bottom: 0;
+            width: 35%;
+            height: 30%;
+
+            background:
+                repeating-linear-gradient(
+                    78deg,
+                    transparent 0 12px,
+                    rgba(105, 143, 111, 0.4) 13px 15px,
+                    transparent 16px 25px
+                ),
+                linear-gradient(
+                    transparent,
+                    rgba(8, 25, 25, 0.95)
+                );
+
+            clip-path: polygon(
+                0 24%, 6% 7%, 11% 32%, 16% 0,
+                21% 35%, 28% 11%, 33% 38%, 39% 4%,
+                45% 31%, 51% 13%, 58% 36%, 64% 0,
+                69% 31%, 77% 12%, 82% 38%, 89% 5%,
+                95% 28%, 100% 17%, 100% 100%, 0 100%
+            );
+        }
+
+        .grass-left {
+            left: 0;
+        }
+
+        .grass-right {
+            right: 0;
+            transform: scaleX(-1);
+        }
+
+        /* Small warm lights */
+        .firefly {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: #ffe3a8;
+            box-shadow: 0 0 12px 4px rgba(255, 209, 132, 0.3);
+        }
+
+        .firefly-one {
+            left: 18%;
+            top: 62%;
+        }
+
+        .firefly-two {
+            right: 17%;
+            top: 70%;
+        }
+
+        .firefly-three {
+            left: 30%;
+            top: 76%;
+        }
+
+        .firefly-four {
+            right: 29%;
+            top: 57%;
+        }
+
+        /* Login content */
+        .page {
+            width: 100%;
+            max-width: 430px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .brand {
+            text-align: center;
+            margin-bottom: 22px;
+        }
+
+        .brand-mark {
+            width: 46px;
+            height: 46px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 12px;
+
+            border: 1px solid rgba(228, 218, 255, 0.46);
+            border-radius: 50%;
+            color: #c7b8f2;
+            background: rgba(224, 216, 255, 0.08);
+            box-shadow: 0 0 32px rgba(174, 156, 255, 0.13);
+
+            font-size: 25px;
+        }
+
+        .brand-name {
+            margin: 0;
+            font-size: 13px;
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+        }
+
+        .brand-line {
+            margin-top: 10px;
+            color: #c5c9dc;
+            font-size: 14px;
+        }
+
+        .login-box {
+            padding: 35px;
+            border: 1px solid rgba(226, 221, 255, 0.22);
+            border-radius: 26px;
+
+            background: rgba(15, 24, 48, 0.76);
+
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+
+            box-shadow:
+                0 24px 70px rgba(0, 0, 0, 0.35),
+                inset 0 1px 0 rgba(255, 255, 255, 0.06);
+        }
+
+        h1 {
+            margin: 0 0 8px;
+            font-size: 32px;
+            font-weight: 500;
+        }
+
+        h2 {
+            margin: 0 0 10px;
+            color: #c7b8f2;
+            font-size: 15px;
+            font-weight: 400;
+        }
+
+        .intro {
+            margin-bottom: 25px;
+            color: #c5c9dc;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        label {
+            display: block;
+            margin: 17px 0 8px;
+            color: #e3e2f0;
+            font-size: 13px;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px 15px;
+            border: 1px solid rgba(221, 223, 242, 0.2);
+            border-radius: 12px;
+            outline: none;
+
+            color: white;
+            background: rgba(5, 12, 28, 0.45);
+
+            font-size: 14px;
+        }
+
+        input::placeholder {
+            color: #929bb5;
+        }
+
+        input:focus {
+            border-color: #c7b8f2;
+            box-shadow: 0 0 0 3px rgba(199, 184, 242, 0.13);
+        }
+
+        button {
+            width: 100%;
+            margin-top: 24px;
+            padding: 14px 18px;
+
+            border: none;
+            border-radius: 13px;
+
+            color: #19172a;
+            background: linear-gradient(135deg, #e4dafa, #c7b8f2);
+
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        button:hover {
+            filter: brightness(1.08);
+        }
+
+        .messages {
+            padding: 11px;
+            border: 1px solid rgba(245, 173, 173, 0.32);
+            border-radius: 10px;
+            color: #ffd7d7;
+            background: rgba(113, 35, 54, 0.25);
+            font-size: 13px;
+        }
+
+        .account-link {
+            margin-top: 22px;
+            color: #c5c9dc;
+            text-align: center;
+            font-size: 13px;
+        }
+
+        a {
+            color: #e0d5ff;
+            text-underline-offset: 4px;
+        }
+
+        .footer-note {
+            margin-top: 18px;
+            color: rgba(211, 216, 233, 0.7);
+            text-align: center;
+            font-size: 11px;
+        }
+
+        @media (max-width: 480px) {
+            .login-box {
+                padding: 25px;
+                border-radius: 22px;
             }
-            h1 {
-                color : #5b5fc7;
+
+            .path {
+                width: 110%;
+                height: 42%;
             }
-            input {
-                width : 90% ;
-                padding: 12px ;
-                margin: 10px;
-                border: 1px solid #ccc;
-                border-radius: 8px;
-                
+
+            .grass {
+                width: 45%;
+                height: 25%;
             }
-            button {
-                background-color: #5b5fc7;
-                color: white;
-                border: none;
-                padding: 12px 30px;
-                border-radius: 20px;
-                cursor: pointer;
-            }
-        </style>
-    </head>
-    <body>
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="hill hill-left"></div>
+    <div class="hill hill-right"></div>
+    <div class="path"></div>
+    <div class="grass grass-left"></div>
+    <div class="grass grass-right"></div>
+
+    <span class="firefly firefly-one"></span>
+    <span class="firefly firefly-two"></span>
+    <span class="firefly firefly-three"></span>
+    <span class="firefly firefly-four"></span>
+
+    <main class="page">
+
+        <header class="brand">
+            <div class="brand-mark">◌</div>
+            <p class="brand-name">SafeCircle</p>
+            <p class="brand-line">A little less alone, together.</p>
+        </header>
+
         <div class="login-box">
-            <h1>SafeCircle</h1>
+
+            <h1>Welcome back.</h1>
             <h2>Login</h2>
-            <input type="email"
-    placeholder="Enter your email">
-            <input type="password"
-    placeholder="Enter your password">
-        <br>
-        <button>Login</button>
-        <p>Don't have an account?<a href="register.html">Register</a></p>
+
+            <p class="intro">
+                The path is still here. Come in and reconnect with your circle.
+            </p>
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+                {% if messages %}
+                    {% for message in messages %}
+                        <p class="messages">{{ message }}</p>
+                    {% endfor %}
+                {% endif %}
+
+                <label for="email">Email address</label>
+                <input
+                    id="email"
+                    type="email"
+                    name="email"
+                    placeholder="Enter your email"
+                    autocomplete="email"
+                    required
+                >
+
+                <label for="password">Password</label>
+                <input
+                    id="password"
+                    type="password"
+                    name="password"
+                    placeholder="Enter your password"
+                    autocomplete="current-password"
+                    required
+                >
+
+                <button type="submit">Continue your journey</button>
+
+            </form>
+
+            <p class="account-link">
+                Don't have an account?
+                <a href="{% url 'register' %}">Register</a>
+            </p>
 
         </div>
-    </body>
+
+        <p class="footer-note">
+            A space to share, listen and feel connected.
+        </p>
+
+    </main>
+
+</body>
 </html>

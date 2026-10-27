@@ -1,40 +1,200 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>SafeCircle</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeCircle | Everyone Under the Same Sky</title>
+
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: Arial, sans-serif;
-            background-color: #f3f6ff;
+            min-height: 100vh;
+            overflow: hidden;
+            color: #f5f3ff;
+            background:
+                radial-gradient(ellipse at 50% 75%,
+                    #465c91 0%, #202d55 38%,
+                    #10172f 72%, #080d1d 100%);
+        }
+
+        .sky {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             text-align: center;
-            padding-top : 150px;
+            padding: 25px;
+            overflow: hidden;
         }
+
+        .moon {
+            position: absolute;
+            top: 9%;
+            right: 16%;
+            width: 85px;
+            height: 85px;
+            border-radius: 50%;
+            background: #fff3d4;
+            box-shadow: 0 0 35px #fff0c455,
+                        0 0 90px #aabfff22;
+        }
+
+        .stars {
+            position: absolute;
+            top: 12%;
+            left: 12%;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: white;
+            box-shadow:
+                100px 90px #ffffff,
+                220px 20px #ffffffaa,
+                310px 150px #ffffff,
+                430px 65px #ffffffbb,
+                550px 180px #ffffff,
+                680px 50px #ffffffaa,
+                780px 140px #ffffff,
+                850px 15px #ffffffbb,
+                40px 300px #ffffffaa,
+                600px 320px #ffffff;
+        }
+
+        .content {
+            position: relative;
+            z-index: 2;
+            max-width: 650px;
+            padding: 55px 35px;
+            border: 1px solid #ffffff30;
+            border-radius: 28px;
+            background: #111a35a6;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 20px 70px #00000030;
+        }
+
+        .brand {
+            font-size: 15px;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: #c7d5ff;
+            margin-bottom: 28px;
+        }
+
         h1 {
-            color :#5b5fc7;
-            font-size: 45px;
+            font-size: clamp(38px, 6vw, 60px);
+            line-height: 1.15;
+            margin-bottom: 22px;
+            font-weight: 600;
         }
+
+        h1 span {
+            color: #c8d5ff;
+        }
+
         p {
-            color : #555;
-            font-size: 20px;
+            font-size: 18px;
+            line-height: 1.8;
+            color: #d2d9ee;
+            margin-bottom: 32px;
         }
-        button {
-            background-color: #5b5fc7;
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 20px;
+
+        .start {
+            display: inline-block;
+            text-decoration: none;
+            color: #182344;
+            background: #f7f3e8;
+            padding: 15px 35px;
+            border-radius: 30px;
             font-size: 16px;
-            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        .start:hover {
+            transform: translateY(-3px);
+            background: #dce5ff;
+        }
+
+        .tagline {
+            margin-top: 25px;
+            margin-bottom: 0;
+            font-size: 13px;
+            color: #b9c5e7;
+            letter-spacing: 1px;
+        }
+
+        .hill {
+            position: absolute;
+            z-index: 1;
+            bottom: -150px;
+            width: 120%;
+            height: 300px;
+            left: -10%;
+            border-radius: 50% 50% 0 0;
+            background: linear-gradient(#25385c, #111b32);
+        }
+
+        .hill.back {
+            bottom: -190px;
+            left: -35%;
+            background: #344669;
+            opacity: 0.65;
+        }
+
+        @media (max-width: 500px) {
+            .content {
+                padding: 40px 22px;
+            }
+
+            .moon {
+                width: 60px;
+                height: 60px;
+                right: 9%;
+                top: 7%;
+            }
+
+            p {
+                font-size: 16px;
+            }
         }
     </style>
 </head>
+
 <body>
-    <div>
-    <h1>Welcome to SafeCircle</h1>
-    <p> A Safe and supportive space for everyone. </p>
-    <a href="login.html">
-    <button>Get Started</button>
-    </a>
-    
-    </div>
+    <main class="sky">
+        <div class="moon"></div>
+        <div class="stars"></div>
+        <div class="hill back"></div>
+        <div class="hill"></div>
+
+        <section class="content">
+            <div class="brand">Welcome to SafeCircle</div>
+
+            <h1>Everyone Under<br>
+                <span>the Same Sky.</span>
+            </h1>
+
+            <p>
+                A safe and supportive space where everyone
+                can feel heard, understood, and connected.
+            </p>
+
+            <a class="start" href="{% url 'login' %}">
+                Begin Your Journey →
+            </a>
+
+            <p class="tagline">
+                Even strangers can feel close beneath the same sky.
+            </p>
+        </section>
+    </main>
 </body>
+</html>
