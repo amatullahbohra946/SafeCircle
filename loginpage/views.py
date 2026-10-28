@@ -6,6 +6,7 @@ from .models import UserProfile , Post , Reply , Mood , Journal , Report, Block
 from django.contrib.auth import authenticate, login
 from datetime import date
 import random
+from .models import UserProfile, generate_anonymous_username
 def home(request):
     return render(request, "index.html")
 
@@ -30,7 +31,6 @@ def login_page(request):
     return render(request, "login.html")
 
 
-
 def register_page(request):
     if request.method == "POST":
         email = request.POST.get("email", "").strip().lower()
@@ -38,11 +38,10 @@ def register_page(request):
         confirm_password = request.POST.get("confirm_password", "")
         dob = request.POST.get("date_of_birth", "").strip()
         confirm_dob = request.POST.get("confirm_date_of_birth", "").strip()
-        username = request.POST.get("anonymous_username", "").strip()
-
+        username = generate_anonymous_username()
         if not all([
             email, password, confirm_password,
-            dob, confirm_dob, username
+            dob, confirm_dob, 
         ]):
             messages.error(request, "Please fill in all fields.")
             return redirect("register")
@@ -89,17 +88,8 @@ def register_page(request):
             )
             return redirect("register")
 
-        if UserProfile.objects.filter(
-            anonymous_username=username
-        ).exists():
-            messages.error(
-                request,
-                "This anonymous username is already taken."
-            )
-            return redirect("register")
-
+        
         user = None
-
         try:
             user = User.objects.create_user(
                 username=email,
@@ -151,8 +141,6 @@ def register_page(request):
         return redirect("login")
 
     return render(request, "register.html")
-
-
 
 
 

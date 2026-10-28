@@ -1,5 +1,7 @@
 
 from django.db import models
+import random
+import string
 
 
 class UserProfile(models.Model):
@@ -130,4 +132,12 @@ class Block(models.Model):
 
     def __str__(self):
         return f"{self.blocker} blocked {self.blocked}"
+def generate_anonymous_username():
+    characters = string.ascii_uppercase + string.digits
 
+    while True:
+        code = ''.join(random.choices(characters, k=5))
+        username = f"SC_{code}"
+
+        if not UserProfile.objects.filter(anonymous_username=username).exists():
+            return username
